@@ -9,9 +9,11 @@ import 'package:walletin/widget/text.dart';
 
 class DialogChange extends StatelessWidget {
   final String title;
+  final String type;
   final Function(int type, String result) onResult;
   DialogChange({
     required this.title,
+    required this.type,
     required this.onResult,
     super.key,
   });

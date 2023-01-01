@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,7 @@ import 'package:walletin/base/func.dart';
 import 'package:walletin/routes/controller/con_main.dart';
 import 'package:walletin/routes/routes.dart';
 import 'package:walletin/view/dialog_change.dart';
+import 'package:walletin/view/sheet_filter.dart';
 import 'package:walletin/widget/text.dart';
 import 'package:walletin/helper/extensions.dart';
 
@@ -43,11 +45,15 @@ class PageMain extends GetView<ConMain> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.dialog(
-            DialogChange(
-              title: ConstString.add,
-              onResult: (type, result) {},
-            ),
+          // controller.showDialogChange(
+          //   title: ConstString.add,
+          //   type: ConstString.typeAdd,
+          // );
+          showCupertinoModalPopup(
+            context: context,
+            builder: (context) {
+              return SheetFilter();
+            },
           );
         },
         backgroundColor: BaseColors.primary,
@@ -139,44 +145,55 @@ class PageMain extends GetView<ConMain> {
 
   Widget _item({required int index}) {
     bool selected = index % 2 == 1;
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: ConstDouble.padding,
-        horizontal: ConstDouble.padding + 4,
-      ),
+    return Material(
       color: selected ? Colors.white : Colors.grey.shade50,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: CustomText(
-              text: "asdhjs asjdasjd asdka sdahsdjas".toCapitalized(),
-              fontWeight: FontWeight.w300,
-            ),
+      child: InkWell(
+        onTap: () {
+          controller.showDialogChange(
+            title: ConstString.edit,
+            type: ConstString.typeEdit,
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: ConstDouble.padding,
+            horizontal: ConstDouble.padding + 4,
           ),
-          SizedBox(
-            width: 104,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                CustomText(
-                  text: "${selected ? "+" : "-"}"
-                      "${BaseFunc.rupiah(money: 400000)}",
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: CustomText(
+                  text: "asdhjs asjdasjd asdka sdahsdjas".toCapitalized(),
                   fontWeight: FontWeight.w300,
-                  fontColor: selected ? BaseColors.input : BaseColors.output,
                 ),
-                CustomText(
-                  text: "22-07-22",
-                  fontWeight: FontWeight.w300,
-                  fontColor: Colors.blueGrey.shade300,
-                  fontSize: 12,
+              ),
+              SizedBox(
+                width: 104,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    CustomText(
+                      text: "${selected ? "+" : "-"}"
+                          "${BaseFunc.rupiah(money: 400000)}",
+                      fontWeight: FontWeight.w300,
+                      fontColor:
+                          selected ? BaseColors.input : BaseColors.output,
+                    ),
+                    CustomText(
+                      text: "22-07-22",
+                      fontWeight: FontWeight.w300,
+                      fontColor: Colors.blueGrey.shade300,
+                      fontSize: 12,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

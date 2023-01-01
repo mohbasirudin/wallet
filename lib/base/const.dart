@@ -5,6 +5,22 @@ class ConstString {
   static const add = "Add";
   static const edit = "Edit";
   static const submit = "Submit";
+  static const typeAdd = "0";
+  static const typeEdit = "1";
+  static const month = [
+    "January",
+    "Febuary",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 }
 
 class ConstDouble {
