@@ -21,6 +21,10 @@ class ConstString {
     "November",
     "December",
   ];
+  static const year = [
+    "2022",
+    "2023",
+  ];
 }
 
 class ConstDouble {
