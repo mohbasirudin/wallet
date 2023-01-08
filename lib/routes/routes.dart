@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:walletin/routes/binding/bin_add.dart';
-import 'package:walletin/routes/binding/bin_edit.dart';
 import 'package:walletin/routes/binding/bin_main.dart';
-import 'package:walletin/view/add.dart';
-import 'package:walletin/view/edit.dart';
 import 'package:walletin/view/main.dart';
 
 class PageTo {
@@ -18,16 +14,6 @@ class PageTo {
       name: main,
       page: const PageMain(),
       binding: BinMain(),
-    ),
-    _page(
-      name: add,
-      page: const PageAdd(),
-      binding: BinAdd(),
-    ),
-    _page(
-      name: edit,
-      page: const PageEdit(),
-      binding: BinEdit(),
     ),
   ];
 

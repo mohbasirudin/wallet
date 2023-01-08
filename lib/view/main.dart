@@ -1,3 +1,4 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:walletin/base/colors.dart';
@@ -114,14 +115,7 @@ class PageMain extends GetView<ConMain> {
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
-                Row(
-                  children: const [
-                    CustomText(text: "Sort"),
-                    Icon(
-                      Icons.arrow_drop_down_rounded,
-                    ),
-                  ],
-                ),
+                _viewSort(),
               ],
             ),
           ),
@@ -150,6 +144,72 @@ class PageMain extends GetView<ConMain> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _viewSort() {
+    return Row(
+      children: [
+        Obx(
+          () {
+            return CustomText(
+              text: ConstString.month[controller.indexSort.value - 1],
+            );
+          },
+        ),
+        CustomPopupMenu(
+          child: Icon(
+            Icons.arrow_drop_down_rounded,
+          ),
+          menuBuilder: () {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(
+                ConstDouble.radius,
+              ),
+              child: SizedBox(
+                width: 120,
+                height: 240,
+                child: ListView.separated(
+                  itemBuilder: (context, index) {
+                    return Material(
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          if (controller.indexSort.value - 1 != index) {
+                            controller.indexSort.value = index + 1;
+                            controller.popupMenuController.hideMenu();
+                            controller.fetch();
+                          }
+                        },
+                        child: SizedBox(
+                          height: 48,
+                          child: Center(
+                            child: CustomText(
+                              text: ConstString.month[index],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      color: Colors.grey.shade300,
+                      thickness: 1,
+                      height: 1,
+                    );
+                  },
+                  itemCount: ConstString.month.length,
+                  padding: EdgeInsets.zero,
+                ),
+              ),
+            );
+          },
+          arrowColor: Colors.white,
+          controller: controller.popupMenuController,
+          pressType: PressType.singleClick,
+        ),
+      ],
     );
   }
 

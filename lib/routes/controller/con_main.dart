@@ -1,3 +1,4 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:walletin/base/const.dart';
@@ -8,11 +9,14 @@ import 'package:walletin/view/dialog_change.dart';
 import 'package:walletin/widget/text.dart';
 
 class ConMain extends GetxController {
+  CustomPopupMenuController popupMenuController = CustomPopupMenuController();
   RxList<ModelWallet> data = <ModelWallet>[].obs;
   RxDouble amount = 0.0.obs;
+  RxInt indexSort = 1.obs;
   @override
   void onInit() {
     // TODO: implement onInit
+    popupMenuController.showMenu;
 
     fetch();
     super.onInit();
@@ -23,7 +27,9 @@ class ConMain extends GetxController {
       data.clear();
     }
     try {
-      await Db.read().then(
+      await Db.read(
+        month: indexSort.value.toString(),
+      ).then(
         (value) {
           if (value.isNotEmpty) {
             double a = 0.0;
@@ -155,7 +161,12 @@ class ConMain extends GetxController {
       int result = await Db.delete(id: model.id.toString());
       if (result == 1) {
         _snackbar(context: context, isFailed: false);
-        amount.value = amount.value - double.parse(model.amount);
+
+        if (model.type == ConstString.amountIn) {
+          amount.value = amount.value - double.parse(model.amount);
+        } else {
+          amount.value = amount.value + double.parse(model.amount);
+        }
         data.removeAt(index);
         if (data.isEmpty) {
           fetch();

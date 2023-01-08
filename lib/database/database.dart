@@ -70,13 +70,15 @@ class Db {
     return result;
   }
 
-  static Future<List<Map<String, dynamic>>> read() async {
+  static Future<List<Map<String, dynamic>>> read(
+      {required String month}) async {
     if (_db == null) {
       await _init();
     }
 
     List<Map<String, dynamic>> map = await _db!.rawQuery(
-      "select * from ${DbTable.name} order by ${DbTable.createdAt} desc",
+      "select * from ${DbTable.name} where ${DbTable.month}=$month "
+      "order by ${DbTable.createdAt} desc",
     );
 
     return map;
