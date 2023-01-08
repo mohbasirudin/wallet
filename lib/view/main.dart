@@ -77,7 +77,6 @@ class PageMain extends GetView<ConMain> {
                       text: BaseFunc.rupiah(
                         money: controller.amount.value,
                       ),
-                      // fontColor: Colors.white,
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                     );
@@ -85,7 +84,6 @@ class PageMain extends GetView<ConMain> {
                 ),
                 const CustomText(
                   text: ConstString.totalBalance,
-                  // fontColor: Colors.white,
                   fontWeight: FontWeight.w300,
                 ),
               ],
