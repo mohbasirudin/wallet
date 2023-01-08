@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BaseFunc {
@@ -7,6 +8,13 @@ class BaseFunc {
     );
     String m = format.format(money);
     return m.substring(0, m.length - 3);
+  }
+
+  static String timeFormat({required String date}) {
+    DateFormat dateFormat = DateFormat("dd-MM-yy");
+    DateTime dateTime = DateTime.parse(date);
+    String format = dateFormat.format(dateTime);
+    return format;
   }
 
   static String generateId() {

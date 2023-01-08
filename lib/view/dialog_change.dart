@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:walletin/base/colors.dart';
 import 'package:walletin/base/const.dart';
+import 'package:walletin/database/wallet.dart';
 import 'package:walletin/widget/text.dart';
 
 class DialogChange extends StatelessWidget {
+  final ModelWallet? data;
   final String title;
   final String type;
   DialogChange({
+    this.data,
     required this.title,
     required this.type,
     super.key,
@@ -19,6 +22,13 @@ class DialogChange extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     controller = Get.put(_ConChange());
+
+    if (data != null) {
+      controller!.conNote.text = data!.note;
+      controller!.conAmount.text = data!.amount;
+      controller!.conType.text = data!.type;
+    }
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
@@ -249,17 +259,14 @@ class _ConChange extends GetxController {
   CustomPopupMenuController conMenu = CustomPopupMenuController();
 
   List<String> types = [
-    "In",
-    "Out",
+    ConstString.amountIn,
+    ConstString.amountOut,
   ];
 
   @override
   void onInit() {
     // TODO: implement onInit
     conMenu.showMenu();
-
-    conAmount.text = "600000";
-    conNote.text = "Tes ${DateTime.now()}";
 
     conType.text = types[1];
 

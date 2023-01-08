@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:walletin/base/colors.dart';
 import 'package:walletin/base/const.dart';
 import 'package:walletin/base/func.dart';
+import 'package:walletin/database/wallet.dart';
 import 'package:walletin/routes/controller/con_main.dart';
 import 'package:walletin/widget/text.dart';
 import 'package:walletin/helper/extensions.dart';
@@ -69,13 +70,17 @@ class PageMain extends GetView<ConMain> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CustomText(
-                  text: BaseFunc.rupiah(
-                    money: 6000000,
-                  ),
-                  // fontColor: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
+                Obx(
+                  () {
+                    return CustomText(
+                      text: BaseFunc.rupiah(
+                        money: controller.amount.value,
+                      ),
+                      // fontColor: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    );
+                  },
                 ),
                 const CustomText(
                   text: ConstString.totalBalance,
@@ -152,7 +157,9 @@ class PageMain extends GetView<ConMain> {
     required BuildContext context,
     required int index,
   }) {
+    ModelWallet data = controller.data[index];
     bool selected = index % 2 == 1;
+    bool isIn = data.type == ConstString.amountIn;
     return Material(
       color: selected ? Colors.white : Colors.grey.shade50,
       child: InkWell(
@@ -161,6 +168,7 @@ class PageMain extends GetView<ConMain> {
             context: context,
             title: ConstString.edit,
             type: ConstString.typeEdit,
+            oldData: data,
           );
         },
         child: Padding(
@@ -174,30 +182,50 @@ class PageMain extends GetView<ConMain> {
             children: [
               Expanded(
                 child: CustomText(
-                  text: "asdhjs asjdasjd asdka sdahsdjas".toCapitalized(),
+                  text: data.note.toCapitalized(),
                   fontWeight: FontWeight.w300,
                 ),
               ),
-              SizedBox(
-                width: 104,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    CustomText(
-                      text: "${selected ? "+" : "-"}"
-                          "${BaseFunc.rupiah(money: 400000)}",
-                      fontWeight: FontWeight.w300,
-                      fontColor:
-                          selected ? BaseColors.input : BaseColors.output,
-                    ),
-                    CustomText(
-                      text: "22-07-22",
-                      fontWeight: FontWeight.w300,
-                      fontColor: Colors.blueGrey.shade300,
-                      fontSize: 12,
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.only(
+                  right: ConstDouble.padding,
+                ),
+                child: SizedBox(
+                  width: 104,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      CustomText(
+                        text: "${isIn ? "+" : "-"}"
+                            "${BaseFunc.rupiah(money: double.parse(data.amount))}",
+                        fontWeight: FontWeight.w300,
+                        fontColor: isIn ? BaseColors.input : BaseColors.output,
+                      ),
+                      CustomText(
+                        text: BaseFunc.timeFormat(
+                          date: data.createdAt,
+                        ),
+                        fontWeight: FontWeight.w300,
+                        fontColor: Colors.blueGrey.shade300,
+                        fontSize: 12,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  controller.delete(
+                    context: context,
+                    model: data,
+                    index: index,
+                  );
+                },
+                child: Icon(
+                  Icons.close,
+                  color: BaseColors.icon,
+                  size: 16,
                 ),
               ),
             ],

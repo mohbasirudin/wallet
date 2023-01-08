@@ -9,6 +9,7 @@ import 'package:walletin/widget/text.dart';
 
 class ConMain extends GetxController {
   RxList<ModelWallet> data = <ModelWallet>[].obs;
+  RxDouble amount = 0.0.obs;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -18,14 +19,25 @@ class ConMain extends GetxController {
   }
 
   void fetch() async {
+    if (data.isNotEmpty) {
+      data.clear();
+    }
     try {
       await Db.read().then(
         (value) {
           if (value.isNotEmpty) {
+            double a = 0.0;
             for (var i = 0; i < value.length; i++) {
               ModelWallet model = ModelWallet.fromMap(value[i]);
+              String type = model.type;
+              if (type == ConstString.amountIn) {
+                a = a + double.parse(model.amount);
+              } else {
+                a = a - double.parse(model.amount);
+              }
               data.add(model);
             }
+            amount.value = a;
           } else {
             data.value = [];
           }
@@ -45,6 +57,7 @@ class ConMain extends GetxController {
           DialogChange(
             title: title,
             type: type,
+            data: oldData,
           ),
         ) ??
         "";
@@ -103,6 +116,7 @@ class ConMain extends GetxController {
       int result = await Db.create(data: model);
       if (result == model.id) {
         _snackbar(context: context, isFailed: false);
+        fetch();
       } else {
         _snackbar(context: context);
       }
@@ -123,6 +137,29 @@ class ConMain extends GetxController {
       );
       if (result == 1) {
         _snackbar(context: context, isFailed: false);
+        fetch();
+      } else {
+        _snackbar(context: context);
+      }
+    } catch (e) {
+      _snackbar(context: context);
+    }
+  }
+
+  void delete({
+    required BuildContext context,
+    required ModelWallet model,
+    required int index,
+  }) async {
+    try {
+      int result = await Db.delete(id: model.id.toString());
+      if (result == 1) {
+        _snackbar(context: context, isFailed: false);
+        amount.value = amount.value - double.parse(model.amount);
+        data.removeAt(index);
+        if (data.isEmpty) {
+          fetch();
+        }
       } else {
         _snackbar(context: context);
       }
@@ -139,6 +176,7 @@ class ConMain extends GetxController {
     SnackBar snackBar = SnackBar(
       content: CustomText(
         text: isFailed ? "Failed" : "Success",
+        fontColor: Colors.white,
       ),
       backgroundColor: isFailed ? Colors.red : Colors.green,
       duration: const Duration(seconds: 1),

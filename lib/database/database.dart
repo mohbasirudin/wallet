@@ -76,7 +76,7 @@ class Db {
     }
 
     List<Map<String, dynamic>> map = await _db!.rawQuery(
-      "select * from ${DbTable.name}",
+      "select * from ${DbTable.name} order by ${DbTable.createdAt} desc",
     );
 
     return map;
