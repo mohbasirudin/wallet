@@ -8,4 +8,13 @@ class BaseFunc {
     String m = format.format(money);
     return m.substring(0, m.length - 3);
   }
+
+  static String generateId() {
+    String date = DateTime.now().toString();
+    String id = date.replaceAll(
+      RegExp(r"[^\s\w]"),
+      "",
+    );
+    return id.split(" ")[1];
+  }
 }

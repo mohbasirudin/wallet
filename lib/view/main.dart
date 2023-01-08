@@ -1,14 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:walletin/base/colors.dart';
 import 'package:walletin/base/const.dart';
 import 'package:walletin/base/func.dart';
 import 'package:walletin/routes/controller/con_main.dart';
-import 'package:walletin/routes/routes.dart';
-import 'package:walletin/view/dialog_change.dart';
-import 'package:walletin/view/sheet_filter.dart';
 import 'package:walletin/widget/text.dart';
 import 'package:walletin/helper/extensions.dart';
 
@@ -45,15 +40,10 @@ class PageMain extends GetView<ConMain> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // controller.showDialogChange(
-          //   title: ConstString.add,
-          //   type: ConstString.typeAdd,
-          // );
-          showCupertinoModalPopup(
+          controller.showDialogChange(
             context: context,
-            builder: (context) {
-              return SheetFilter();
-            },
+            title: ConstString.add,
+            type: ConstString.typeAdd,
           );
         },
         backgroundColor: BaseColors.primary,
@@ -131,10 +121,25 @@ class PageMain extends GetView<ConMain> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: 20,
-              itemBuilder: (context, index) {
-                return _item(index: index);
+            child: Obx(
+              () {
+                if (controller.data.isEmpty) {
+                  return const Center(
+                    child: CustomText(
+                      text: "Empty",
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: controller.data.length,
+                    itemBuilder: (context, index) {
+                      return _item(
+                        context: context,
+                        index: index,
+                      );
+                    },
+                  );
+                }
               },
             ),
           ),
@@ -143,13 +148,17 @@ class PageMain extends GetView<ConMain> {
     );
   }
 
-  Widget _item({required int index}) {
+  Widget _item({
+    required BuildContext context,
+    required int index,
+  }) {
     bool selected = index % 2 == 1;
     return Material(
       color: selected ? Colors.white : Colors.grey.shade50,
       child: InkWell(
         onTap: () {
           controller.showDialogChange(
+            context: context,
             title: ConstString.edit,
             type: ConstString.typeEdit,
           );

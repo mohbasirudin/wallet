@@ -6,4 +6,6 @@ class DbTable {
   static const updatedAt = "updatedAt";
   static const type = "type";
   static const amount = "amount";
+  static const month = "month";
+  static const year = "year";
 }

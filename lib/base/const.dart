@@ -25,6 +25,10 @@ class ConstString {
     "2022",
     "2023",
   ];
+
+  static const queryNote = "note";
+  static const queryAmount = "amount";
+  static const queryType = "type";
 }
 
 class ConstDouble {

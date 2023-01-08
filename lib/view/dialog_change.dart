@@ -1,7 +1,5 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:walletin/base/colors.dart';
 import 'package:walletin/base/const.dart';
@@ -10,11 +8,9 @@ import 'package:walletin/widget/text.dart';
 class DialogChange extends StatelessWidget {
   final String title;
   final String type;
-  final Function(int type, String result) onResult;
   DialogChange({
     required this.title,
     required this.type,
-    required this.onResult,
     super.key,
   });
 
@@ -170,7 +166,13 @@ class DialogChange extends StatelessWidget {
       child: Material(
         color: BaseColors.primary,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            String result =
+                "?${ConstString.queryNote}=${controller!.conNote.text}"
+                "&&${ConstString.queryAmount}=${controller!.conAmount.text}"
+                "&&${ConstString.queryType}=${controller!.conType.text}";
+            Get.back(result: result);
+          },
           child: const SizedBox(
             width: double.infinity,
             height: 48,
@@ -255,6 +257,9 @@ class _ConChange extends GetxController {
   void onInit() {
     // TODO: implement onInit
     conMenu.showMenu();
+
+    conAmount.text = "600000";
+    conNote.text = "Tes ${DateTime.now()}";
 
     conType.text = types[1];
 

@@ -14,10 +14,11 @@ class Db {
       path,
       version: 1,
       onCreate: (db, version) async {
-        await db.query(
+        await db.execute(
           "create table ${DbTable.name} "
           "(${DbTable.id} integer primary key, ${DbTable.note} text, "
           "${DbTable.createdAt} text, ${DbTable.updatedAt} text, "
+          "${DbTable.month} text, ${DbTable.year} text, "
           "${DbTable.type} text, ${DbTable.amount} text)",
         );
       },
