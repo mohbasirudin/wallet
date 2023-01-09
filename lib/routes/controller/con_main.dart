@@ -18,6 +18,8 @@ class ConMain extends GetxController {
     // TODO: implement onInit
     popupMenuController.showMenu;
 
+    indexSort.value = DateTime.now().month;
+
     fetch();
     super.onInit();
   }
