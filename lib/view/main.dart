@@ -24,15 +24,6 @@ class PageMain extends GetView<ConMain> {
           fontWeight: FontWeight.bold,
           fontSize: 18,
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.settings,
-              color: Colors.blueGrey,
-            ),
-          ),
-        ],
       ),
       body: Column(
         children: [

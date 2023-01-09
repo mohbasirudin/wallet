@@ -81,7 +81,6 @@ class ConMain extends GetxController {
       bool isAdd = type == ConstString.typeAdd;
 
       DateTime today = DateTime.now();
-      print("isAdd=> $isAdd");
       if (isAdd) {
         id = int.parse(BaseFunc.generateId());
         createdAt = today.toString();
@@ -105,11 +104,16 @@ class ConMain extends GetxController {
         month: month,
         year: year,
       );
-      print("id=>$id");
       if (type == ConstString.typeAdd) {
-        _add(context: context, model: model);
+        _add(
+          context: context,
+          model: model,
+        );
       } else {
-        _edit(context: context, model: model);
+        _edit(
+          context: context,
+          model: model,
+        );
       }
     }
   }
@@ -121,14 +125,23 @@ class ConMain extends GetxController {
     try {
       int result = await Db.create(data: model);
       if (result == model.id) {
-        _snackbar(context: context, isFailed: false);
+        _snackbar(
+          context: context,
+          isFailed: false,
+          message: ConstString.add,
+        );
         fetch();
       } else {
-        _snackbar(context: context);
+        _snackbar(
+          context: context,
+          message: ConstString.add,
+        );
       }
     } catch (e) {
-      print("error add => $e");
-      _snackbar(context: context);
+      _snackbar(
+        context: context,
+        message: ConstString.add,
+      );
     }
   }
 
@@ -142,13 +155,23 @@ class ConMain extends GetxController {
         id: model.id.toString(),
       );
       if (result == 1) {
-        _snackbar(context: context, isFailed: false);
+        _snackbar(
+          context: context,
+          isFailed: false,
+          message: ConstString.edit,
+        );
         fetch();
       } else {
-        _snackbar(context: context);
+        _snackbar(
+          context: context,
+          message: ConstString.edit,
+        );
       }
     } catch (e) {
-      _snackbar(context: context);
+      _snackbar(
+        context: context,
+        message: ConstString.edit,
+      );
     }
   }
 
@@ -160,7 +183,11 @@ class ConMain extends GetxController {
     try {
       int result = await Db.delete(id: model.id.toString());
       if (result == 1) {
-        _snackbar(context: context, isFailed: false);
+        _snackbar(
+          context: context,
+          isFailed: false,
+          message: ConstString.delete,
+        );
 
         if (model.type == ConstString.amountIn) {
           amount.value = amount.value - double.parse(model.amount);
@@ -172,21 +199,27 @@ class ConMain extends GetxController {
           fetch();
         }
       } else {
-        _snackbar(context: context);
+        _snackbar(
+          context: context,
+          message: ConstString.delete,
+        );
       }
     } catch (e) {
-      _snackbar(context: context);
+      _snackbar(
+        context: context,
+        message: ConstString.delete,
+      );
     }
   }
 
   void _snackbar({
     required BuildContext context,
-    // String? message,
+    String? message,
     bool isFailed = true,
   }) {
     SnackBar snackBar = SnackBar(
       content: CustomText(
-        text: isFailed ? "Failed" : "Success",
+        text: isFailed ? "Failed: $message" : "Success: $message",
         fontColor: Colors.white,
       ),
       backgroundColor: isFailed ? Colors.red : Colors.green,

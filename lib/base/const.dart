@@ -4,6 +4,7 @@ class ConstString {
   static const transaction = "Transaction";
   static const add = "Add";
   static const edit = "Edit";
+  static const delete = "Delete";
   static const submit = "Submit";
   static const typeAdd = "0";
   static const typeEdit = "1";
